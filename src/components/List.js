@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import API_URL from '../data/api';
-import { Accordion, Alert, Button } from 'react-bootstrap';
+import { Accordion, Button } from 'react-bootstrap';
 
 const List = () => {
   const { listId } = useParams();
