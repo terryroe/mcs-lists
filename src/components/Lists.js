@@ -21,7 +21,7 @@ const Lists = () => {
     <>
       <h1>Lists</h1>
       <Link to="new">
-        <h2>New List</h2>
+        <h2 className="my-3">New List</h2>
       </Link>
 
       {lists.length > 0 ? (
@@ -33,7 +33,7 @@ const Lists = () => {
       ) : isLoading ? (
         <h2>Loading...</h2>
       ) : (
-        <h2>No Lists. Create a new one?</h2>
+        <h2>No Lists. Create a new one!</h2>
       )}
 
       <Outlet />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import API_URL from '../data/api';
-import { Alert, Button } from 'react-bootstrap';
+import { Accordion, Alert, Button } from 'react-bootstrap';
 
 const List = () => {
   const { listId } = useParams();
@@ -23,23 +23,34 @@ const List = () => {
     getList();
   }, [listId]);
 
+  const handleDelete = async (itemId) => {
+    setItems(items.filter((item) => item.id !== itemId));
+    await fetch(`${API_URL}/${listId}/items/${itemId}`, {
+      method: 'DELETE',
+    });
+  };
+
   return (
     <>
-      <h1>{list.name}</h1>
+      <h1 className="my-3">{list.name}</h1>
 
-      {items.map((item) => (
-        <Alert
-          key={item.id}
-          className="d-flex align-items-center justify-content-between"
-        >
-          <Link to={`items/${item.id}`} as={Link}>
-            {item.title}
-          </Link>
-          <Button>Delete me</Button>
-        </Alert>
-      ))}
-
-      <Outlet />
+      <Accordion>
+        {items.map((item, index) => (
+          <Accordion.Item eventKey={index} key={item.id}>
+            <Accordion.Header>{item.title}</Accordion.Header>
+            <Accordion.Body>
+              <p>{item.text}</p>
+              <Button
+                onClick={() => {
+                  handleDelete(item.id);
+                }}
+              >
+                Delete me
+              </Button>
+            </Accordion.Body>
+          </Accordion.Item>
+        ))}
+      </Accordion>
     </>
   );
 };
