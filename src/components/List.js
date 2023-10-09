@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import API_URL from '../data/api';
-import { Alert, NavLink, Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 
 const List = () => {
   const { listId } = useParams();
