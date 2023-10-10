@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import API_URL from '../data/api';
 
 const Lists = () => {
@@ -35,8 +35,6 @@ const Lists = () => {
       ) : (
         <h2>No Lists. Create a new one!</h2>
       )}
-
-      <Outlet />
     </>
   );
 };

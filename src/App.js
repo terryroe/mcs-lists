@@ -6,7 +6,6 @@ import Lists from './components/Lists';
 import List from './components/List';
 import NewList from './components/NewList';
 import NotFound from './components/NotFound';
-import Item from './components/Item';
 
 function App() {
   return (
@@ -14,11 +13,9 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="lists" element={<Lists />}></Route>
+          <Route path="lists" element={<Lists />} />
           <Route path="/lists/new" element={<NewList />} />
-          <Route path="/lists/:listId" element={<List />}>
-            <Route path="items/:itemId" element={<Item />} />
-          </Route>
+          <Route path="/lists/:listId" element={<List />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
