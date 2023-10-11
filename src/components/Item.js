@@ -1,28 +1,70 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import API_URL from '../data/api';
+import { useState } from 'react';
+import { Accordion, Button, Form } from 'react-bootstrap';
 
-const Item = () => {
-  const { listId, itemId } = useParams();
-  const [item, setItem] = useState();
-
-  useEffect(() => {
-    const getItem = async () => {
-      const response = await fetch(`${API_URL}/${listId}/items/${itemId}`);
-      const data = await response.json();
-      setItem(data);
-    };
-    getItem();
-  }, [listId, itemId]);
-
-  if (!item) {
-    return <h2>Loading...</h2>;
-  }
+const Item = ({ item, deleteItem, updateItem }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState(item.title);
+  const [text, setText] = useState(item.text);
 
   return (
     <>
-      <h1>{item.title}</h1>
-      <p>{item.text}</p>
+      <Accordion.Item eventKey={item.id} key={item.id}>
+        <Accordion.Header>{item.title}</Accordion.Header>
+        <Accordion.Body>
+          {isEditing ? (
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                updateItem({ ...item, title, text });
+                setIsEditing(false);
+              }}
+            >
+              <Form.Group className="mb-3" controlId={`title-${item.id}`}>
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter the item title"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId={`text-${item.id}`}>
+                <Form.Label>Text</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder="Enter the item text"
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          ) : (
+            <>
+              <p>{item.text}</p>
+              <Button
+                className="me-3"
+                variant="primary"
+                onClick={() => {
+                  setIsEditing(true);
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  deleteItem(item.id);
+                }}
+              >
+                Delete
+              </Button>
+            </>
+          )}
+        </Accordion.Body>
+      </Accordion.Item>
     </>
   );
 };

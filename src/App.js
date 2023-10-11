@@ -14,8 +14,8 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="lists" element={<Lists />} />
-          <Route path="/lists/new" element={<NewList />} />
-          <Route path="/lists/:listId" element={<List />} />
+          <Route path="lists/new" element={<NewList />} />
+          <Route path="lists/:listId" element={<List />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
@@ -42,7 +42,7 @@ function Navigation() {
           MCS Lists
         </Navbar.Brand>
         <Nav className="me-auto">
-          <Nav.Link as={Link} to="/lists">
+          <Nav.Link as={Link} to="lists">
             Lists
           </Nav.Link>
         </Nav>
