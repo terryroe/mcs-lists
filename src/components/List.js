@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import API_URL from '../data/api';
+import { useParams } from 'react-router-dom';
 import { Accordion, Button } from 'react-bootstrap';
+import API_URL from '../data/api';
 import Item from './Item';
 import NewItem from './NewItem';
+import EditList from './EditList';
 
 const List = () => {
   const { listId } = useParams();
   const [list, setList] = useState({});
   const [items, setItems] = useState([]);
   const [isAddingNewItem, setIsAddingNewItem] = useState(false);
-  const navigate = useNavigate();
+  const [isEditingList, setIsEditingList] = useState(false);
 
   useEffect(() => {
     const getList = async () => {
@@ -29,6 +30,15 @@ const List = () => {
 
   const addNewItem = (itemToAdd) => {
     setItems(items.concat(itemToAdd));
+  };
+
+  const updateList = async (listToUpdate) => {
+    setList({ ...list, ...listToUpdate });
+    await fetch(`${API_URL}/${listId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(listToUpdate),
+    });
   };
 
   const updateItem = async (itemToUpdate) => {
@@ -72,20 +82,32 @@ const List = () => {
         </Button>
       )}
 
-      <Button
-        variant="secondary"
-        className="me-3"
-        onClick={() => navigate('./edit')}
-      >
-        Edit List
-      </Button>
-      <Button
-        variant="danger"
-        className="me-3"
-        onClick={() => window.confirm('Delete list and all its items?')}
-      >
-        Delete List
-      </Button>
+      {isEditingList ? (
+        <EditList
+          updateList={updateList}
+          list={list}
+          setIsEditingList={setIsEditingList}
+        />
+      ) : (
+        <>
+          <Button
+            variant="secondary"
+            className="me-3"
+            onClick={() => setIsEditingList(true)}
+          >
+            Edit List
+          </Button>
+          <Button
+            variant="danger"
+            className="me-3"
+            onClick={() => window.confirm('Delete list and all its items?')}
+          >
+            Delete List
+          </Button>
+        </>
+      )}
+
+      <h2 className="my-3">List Items</h2>
       <Accordion>
         {items.map((item) => (
           <Item
