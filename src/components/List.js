@@ -3,14 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import API_URL from '../data/api';
 import { Accordion, Button, Form } from 'react-bootstrap';
 import Item from './Item';
+import NewItem from './NewItem';
 
 const List = () => {
   const { listId } = useParams();
   const [list, setList] = useState({});
   const [items, setItems] = useState([]);
   const [isAddingNewItem, setIsAddingNewItem] = useState(false);
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,32 +27,8 @@ const List = () => {
     getList();
   }, [listId]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (title === '') {
-      alert('The new item must have a title');
-      return;
-    }
-
-    createItem({ title, text });
-    resetForm();
-  };
-
-  const resetForm = () => {
-    setIsAddingNewItem(false);
-    setTitle('');
-    setText('');
-  };
-
-  const createItem = async (newItem) => {
-    const response = await fetch(`${API_URL}/${listId}/items`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newItem),
-    });
-    const data = await response.json();
-    setItems(items.concat(data));
+  const addNewItem = (itemToAdd) => {
+    setItems(items.concat(itemToAdd));
   };
 
   const updateItem = async (itemToUpdate) => {
@@ -81,58 +56,27 @@ const List = () => {
 
   return (
     <>
-      <h1 className="my-3">
-        {list.name}
-        <Button
-          variant="primary"
-          className="mx-3"
-          onClick={() => navigate('./edit')}
-        >
-          Edit List
-        </Button>
-        <Button
-          variant="danger"
-          onClick={() => window.confirm('Delete list and all its items?')}
-        >
-          Delete List
-        </Button>
-      </h1>
+      <h1 className="mt-2">{list.name}</h1>
+      <Button
+        variant="secondary"
+        className="me-3"
+        onClick={() => navigate('./edit')}
+      >
+        Edit List
+      </Button>
+      <Button
+        variant="danger"
+        className="me-3"
+        onClick={() => window.confirm('Delete list and all its items?')}
+      >
+        Delete List
+      </Button>
 
       {isAddingNewItem ? (
-        <>
-          <Form onSubmit={handleSubmit}>
-            <h4>Add New Item</h4>
-            <Form.Group className="mb-3" controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter the item title"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="text">
-              <Form.Label>Text</Form.Label>
-              <Form.Control
-                as="textarea"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Enter the item text"
-              />
-            </Form.Group>
-            <Button
-              variant="secondary"
-              type="button"
-              className="me-3 mb-3"
-              onClick={resetForm}
-            >
-              Cancel
-            </Button>
-            <Button variant="primary" type="submit" className="mb-3">
-              Submit
-            </Button>
-          </Form>
-        </>
+        <NewItem
+          addNewItem={addNewItem}
+          setIsAddingNewItem={setIsAddingNewItem}
+        />
       ) : (
         <Button
           variant="primary"
