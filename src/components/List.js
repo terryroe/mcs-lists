@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import API_URL from '../data/api';
-import { Accordion, Button, Form } from 'react-bootstrap';
+import { Accordion, Button } from 'react-bootstrap';
 import Item from './Item';
 import NewItem from './NewItem';
 
@@ -57,6 +57,21 @@ const List = () => {
   return (
     <>
       <h1 className="mt-2">{list.name}</h1>
+      {isAddingNewItem ? (
+        <NewItem
+          addNewItem={addNewItem}
+          setIsAddingNewItem={setIsAddingNewItem}
+        />
+      ) : (
+        <Button
+          variant="primary"
+          className="my-3 me-3"
+          onClick={() => setIsAddingNewItem(true)}
+        >
+          New Item
+        </Button>
+      )}
+
       <Button
         variant="secondary"
         className="me-3"
@@ -71,22 +86,6 @@ const List = () => {
       >
         Delete List
       </Button>
-
-      {isAddingNewItem ? (
-        <NewItem
-          addNewItem={addNewItem}
-          setIsAddingNewItem={setIsAddingNewItem}
-        />
-      ) : (
-        <Button
-          variant="primary"
-          className="my-3"
-          onClick={() => setIsAddingNewItem(true)}
-        >
-          New Item
-        </Button>
-      )}
-
       <Accordion>
         {items.map((item) => (
           <Item
