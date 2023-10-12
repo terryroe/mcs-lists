@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Accordion, Button } from 'react-bootstrap';
 import API_URL from '../data/api';
 import Item from './Item';
@@ -12,6 +12,7 @@ const List = () => {
   const [items, setItems] = useState([]);
   const [isAddingNewItem, setIsAddingNewItem] = useState(false);
   const [isEditingList, setIsEditingList] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getList = async () => {
@@ -52,6 +53,28 @@ const List = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(itemToUpdate),
     });
+  };
+
+  const deleteList = async () => {
+    if (
+      !window.confirm(
+        'Are you sure you wan to delete this list and all of its items?'
+      )
+    ) {
+      return;
+    }
+
+    items.forEach(async (item) => {
+      await fetch(`${API_URL}/${listId}/items/${item.id}`, {
+        method: 'DELETE',
+      });
+    });
+
+    await fetch(`${API_URL}/${listId}`, {
+      method: 'DELETE',
+    });
+
+    navigate('/lists');
   };
 
   const deleteItem = async (itemId) => {
@@ -97,27 +120,27 @@ const List = () => {
           >
             Edit List
           </Button>
-          <Button
-            variant="danger"
-            className="me-3"
-            onClick={() => window.confirm('Delete list and all its items?')}
-          >
+          <Button variant="danger" className="me-3" onClick={deleteList}>
             Delete List
           </Button>
         </>
       )}
 
       <h2 className="my-3">List Items</h2>
-      <Accordion>
-        {items.map((item) => (
-          <Item
-            key={item.id}
-            item={item}
-            deleteItem={deleteItem}
-            updateItem={updateItem}
-          />
-        ))}
-      </Accordion>
+      {items.length === 0 ? (
+        <h3>Create some new items</h3>
+      ) : (
+        <Accordion>
+          {items.map((item) => (
+            <Item
+              key={item.id}
+              item={item}
+              deleteItem={deleteItem}
+              updateItem={updateItem}
+            />
+          ))}
+        </Accordion>
+      )}
     </>
   );
 };
