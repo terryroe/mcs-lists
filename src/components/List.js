@@ -124,11 +124,7 @@ const List = () => {
               variant="secondary"
               type="button"
               className="me-3 mb-3"
-              onClick={() => {
-                setIsAddingNewItem(false);
-                setTitle('');
-                setText('');
-              }}
+              onClick={resetForm}
             >
               Cancel
             </Button>

@@ -4,7 +4,6 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import Home from './components/Home';
 import Lists from './components/Lists';
 import List from './components/List';
-import NewList from './components/NewList';
 import NotFound from './components/NotFound';
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="lists" element={<Lists />} />
-          <Route path="lists/new" element={<NewList />} />
           <Route path="lists/:listId" element={<List />} />
           <Route path="*" element={<NotFound />} />
         </Route>
