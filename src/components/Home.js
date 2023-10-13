@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+// A simple home page for now.  Could be used for more information later.
 const Home = () => {
   return (
     <>

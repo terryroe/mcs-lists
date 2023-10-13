@@ -6,7 +6,9 @@ import Item from './Item';
 import NewItem from './NewItem';
 import EditList from './EditList';
 
+// A component for managing a list and the items it contains.
 const List = () => {
+  // Get the id of the list from the url.
   const { listId } = useParams();
   const [list, setList] = useState({});
   const [items, setItems] = useState([]);
@@ -15,9 +17,11 @@ const List = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Get the list associated with the listId from the api.
     const getList = async () => {
       try {
         const response = await fetch(`${API_URL}/${listId}`);
+        // Handle api errors.
         if (!response.ok) {
           throw new Error(response.status);
         }
@@ -25,30 +29,38 @@ const List = () => {
         setList(data);
         getItems();
       } catch (e) {
-        console.log('Error getting List --', e);
+        console.error('Error getting List --', e);
+        // Display the error page.
         navigate('/error');
       }
     };
+    // Get the items associated with the list (listId) from the api.
     const getItems = async () => {
       try {
         const response = await fetch(`${API_URL}/${listId}/items`);
+        // Handle api errors.
         if (!response.ok) {
           throw new Error(response.status);
         }
         const data = await response.json();
         setItems(data);
       } catch (e) {
-        console.log('Error getting Items --', e);
+        console.error('Error getting Items --', e);
+        // Display the error page.
         navigate('/error');
       }
     };
     getList();
   }, [listId, navigate]);
 
+  // Pass this function to NewItem component so it can be called to update the
+  // list of items in this component.
   const addNewItem = (itemToAdd) => {
     setItems(items.concat(itemToAdd));
   };
 
+  // Pass this function to EditList component so it can be called to update the
+  // list in this component.
   const updateList = async (listToUpdate) => {
     setList({ ...list, ...listToUpdate });
     await fetch(`${API_URL}/${listId}`, {
@@ -58,6 +70,8 @@ const List = () => {
     });
   };
 
+  // Pass this function to the Item component so it can be called to update the
+  // item in this component and update the list of items with the updated item.
   const updateItem = async (itemToUpdate) => {
     setItems(
       items.map((item) =>
@@ -71,6 +85,7 @@ const List = () => {
     });
   };
 
+  // Handle deleting a list.
   const deleteList = async () => {
     if (
       !window.confirm(
@@ -80,19 +95,25 @@ const List = () => {
       return;
     }
 
+    // If we delete the list, we want to remove all the items from the list
+    // first.
     items.forEach(async (item) => {
       await fetch(`${API_URL}/${listId}/items/${item.id}`, {
         method: 'DELETE',
       });
     });
 
+    // Delete the list from the api.
     await fetch(`${API_URL}/${listId}`, {
       method: 'DELETE',
     });
 
+    // Go back to the list of lists.
     navigate('/lists');
   };
 
+  // Pass this function to the Item component so it can be called to remove the
+  // item in this component.
   const deleteItem = async (itemId) => {
     if (!window.confirm('Are you sure you want to delete this item?')) {
       return;
@@ -108,6 +129,7 @@ const List = () => {
       <h1 className="mt-2">{list.name}</h1>
 
       {isEditingList ? (
+        // Use the EditList component for making changes to a list.
         <EditList
           updateList={updateList}
           list={list}
@@ -115,6 +137,7 @@ const List = () => {
         />
       ) : (
         <>
+          {/* Allow for editing and deleting lists. */}
           <Button
             variant="secondary"
             className="me-3"
@@ -130,11 +153,13 @@ const List = () => {
 
       <h2 className="my-3">List Items</h2>
       {isAddingNewItem ? (
+        // Use the NewItem component for creating a new item in a list.
         <NewItem
           addNewItem={addNewItem}
           setIsAddingNewItem={setIsAddingNewItem}
         />
       ) : (
+        // Start the process of adding a new item.
         <Button
           variant="primary"
           className="mb-3"
@@ -146,6 +171,7 @@ const List = () => {
       {items.length === 0 ? (
         <h3>Create some new items</h3>
       ) : (
+        // Display a list of all items utilizing the Item component for each.
         <Accordion>
           {items.map((item) => (
             <Item

@@ -7,22 +7,24 @@ import List from './components/List';
 import NotFound from './components/NotFound';
 import Error from './components/Error';
 
+// Use React Router 6 to organize and control access to different parts of the
+// application.
 function App() {
   return (
-    <>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="lists" element={<Lists />} />
-          <Route path="lists/:listId" element={<List />} />
-          <Route path="error" element={<Error />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="lists" element={<Lists />} />
+        <Route path="lists/:listId" element={<List />} />
+        <Route path="error" element={<Error />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 
+// Use a Layout element to easily structure the page layouts.  It's not fully
+// utilized here, but keeps a spot open for a more advanced layout.
 function Layout() {
   return (
     <>
@@ -34,6 +36,8 @@ function Layout() {
   );
 }
 
+// The navbar isn't strictly necessary in this simple app, but it, too, allows
+// for more advanced navigation if/when needed.
 function Navigation() {
   return (
     <Navbar bg="primary" data-bs-theme="dark" sticky="top">

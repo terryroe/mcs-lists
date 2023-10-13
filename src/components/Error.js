@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+// An error element for displaying a message when there is an error.  Includes a
+// link back to the Home page.
 const Error = ({ message }) => {
   return (
     <>

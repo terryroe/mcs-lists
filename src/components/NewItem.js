@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import API_URL from '../data/api';
-import { useParams } from 'react-router-dom';
 
 const NewItem = ({ addNewItem, setIsAddingNewItem }) => {
   const [title, setTitle] = useState('');
@@ -11,6 +11,7 @@ const NewItem = ({ addNewItem, setIsAddingNewItem }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Don't let items be created without a title.
     if (title === '') {
       alert('The new item must have a title');
       return;
@@ -20,12 +21,14 @@ const NewItem = ({ addNewItem, setIsAddingNewItem }) => {
     resetForm();
   };
 
+  // Reset the form for another use.
   const resetForm = () => {
     setIsAddingNewItem(false);
     setTitle('');
     setText('');
   };
 
+  // Create a new item via the api.
   const createItem = async (newItem) => {
     const response = await fetch(`${API_URL}/${listId}/items`, {
       method: 'POST',
@@ -33,9 +36,11 @@ const NewItem = ({ addNewItem, setIsAddingNewItem }) => {
       body: JSON.stringify(newItem),
     });
     const data = await response.json();
+    // Call this function to add the item in the parent component.
     addNewItem(data);
   };
 
+  // A simple form for adding a new item.
   return (
     <Form onSubmit={handleSubmit} className="mt-3">
       <h4>Add New Item</h4>
