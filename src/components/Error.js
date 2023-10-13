@@ -4,7 +4,7 @@ const Error = ({ message }) => {
   return (
     <>
       <h1 className="my-4">Error</h1>
-      <p>An error occured.</p>
+      <p>An error occurred.</p>
       <p>
         Please start over at the
         <Link to="/" className="ms-1">

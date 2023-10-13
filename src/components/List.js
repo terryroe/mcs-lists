@@ -74,7 +74,7 @@ const List = () => {
   const deleteList = async () => {
     if (
       !window.confirm(
-        'Are you sure you wan to delete this list and all of its items?'
+        'Are you sure you want to delete this list and all of its items?'
       )
     ) {
       return;

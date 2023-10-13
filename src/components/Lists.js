@@ -51,7 +51,7 @@ const Lists = () => {
 
   return (
     <>
-      <h1>Lists</h1>
+      <h1 className="my-4">Lists</h1>
       {isAddingNewList ? (
         <>
           <Form onSubmit={handleSubmit}>
@@ -78,7 +78,7 @@ const Lists = () => {
           </Form>
         </>
       ) : (
-        <Button className="my-3" onClick={() => setIsAddingNewList(true)}>
+        <Button className="mb-3" onClick={() => setIsAddingNewList(true)}>
           New List
         </Button>
       )}
