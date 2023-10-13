@@ -16,18 +16,34 @@ const List = () => {
 
   useEffect(() => {
     const getList = async () => {
-      const response = await fetch(`${API_URL}/${listId}`);
-      const data = await response.json();
-      setList(data);
-      getItems();
+      try {
+        const response = await fetch(`${API_URL}/${listId}`);
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+        const data = await response.json();
+        setList(data);
+        getItems();
+      } catch (e) {
+        console.log('Error getting List --', e);
+        navigate('/error');
+      }
     };
     const getItems = async () => {
-      const response = await fetch(`${API_URL}/${listId}/items`);
-      const data = await response.json();
-      setItems(data);
+      try {
+        const response = await fetch(`${API_URL}/${listId}/items`);
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+        const data = await response.json();
+        setItems(data);
+      } catch (e) {
+        console.log('Error getting Items --', e);
+        navigate('/error');
+      }
     };
     getList();
-  }, [listId]);
+  }, [listId, navigate]);
 
   const addNewItem = (itemToAdd) => {
     setItems(items.concat(itemToAdd));
@@ -90,20 +106,6 @@ const List = () => {
   return (
     <>
       <h1 className="mt-2">{list.name}</h1>
-      {isAddingNewItem ? (
-        <NewItem
-          addNewItem={addNewItem}
-          setIsAddingNewItem={setIsAddingNewItem}
-        />
-      ) : (
-        <Button
-          variant="primary"
-          className="my-3 me-3"
-          onClick={() => setIsAddingNewItem(true)}
-        >
-          New Item
-        </Button>
-      )}
 
       {isEditingList ? (
         <EditList
@@ -127,6 +129,20 @@ const List = () => {
       )}
 
       <h2 className="my-3">List Items</h2>
+      {isAddingNewItem ? (
+        <NewItem
+          addNewItem={addNewItem}
+          setIsAddingNewItem={setIsAddingNewItem}
+        />
+      ) : (
+        <Button
+          variant="primary"
+          className="mb-3"
+          onClick={() => setIsAddingNewItem(true)}
+        >
+          New Item
+        </Button>
+      )}
       {items.length === 0 ? (
         <h3>Create some new items</h3>
       ) : (

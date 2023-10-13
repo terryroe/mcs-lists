@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Lists from './components/Lists';
 import List from './components/List';
 import NotFound from './components/NotFound';
+import Error from './components/Error';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="lists" element={<Lists />} />
           <Route path="lists/:listId" element={<List />} />
+          <Route path="error" element={<Error />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

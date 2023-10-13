@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 
-const NotFound = () => {
+const Error = ({ message }) => {
   return (
     <>
-      <h1 className="my-4">Not Found</h1>
-      <p>Sorry, the page you were looking for doesn't exist.</p>
+      <h1 className="my-4">Error</h1>
+      <p>An error occured.</p>
       <p>
-        Start over at the
+        Please start over at the
         <Link to="/" className="ms-1">
           home page
         </Link>
@@ -16,4 +16,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default Error;

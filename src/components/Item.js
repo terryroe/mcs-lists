@@ -6,19 +6,19 @@ const Item = ({ item, deleteItem, updateItem }) => {
   const [title, setTitle] = useState(item.title);
   const [text, setText] = useState(item.text);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateItem({ ...item, title, text });
+    setIsEditing(false);
+  };
+
   return (
     <>
       <Accordion.Item eventKey={item.id} key={item.id}>
         <Accordion.Header>{item.title}</Accordion.Header>
         <Accordion.Body>
           {isEditing ? (
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                updateItem({ ...item, title, text });
-                setIsEditing(false);
-              }}
-            >
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId={`title-${item.id}`}>
                 <Form.Label>Title</Form.Label>
                 <Form.Control
@@ -37,6 +37,14 @@ const Item = ({ item, deleteItem, updateItem }) => {
                   placeholder="Enter the item text"
                 />
               </Form.Group>
+              <Button
+                variant="secondary"
+                type="button"
+                className="me-3"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
               <Button variant="primary" type="submit">
                 Submit
               </Button>
